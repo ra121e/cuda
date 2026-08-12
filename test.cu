@@ -8,7 +8,7 @@ __global__ void cuda_hello() {
 int main() {
     printf("Hello World from CPU!\n");
 
-    cuda_hello<<<1, 4>>>();
+    cuda_hello<<<1, 64>>>();
 
     // 終了を待つ
     cudaDeviceSynchronize();
