@@ -15,6 +15,19 @@ __global__ void vectorAdd(
 
     if (i < N) {
         C[i] = A[i] + B[i];
+
+        if (blockIdx.x < 2 && threadIdx.x < 4) {
+            printf(
+                "GPU: block=%d thread=%d global_i=%d "
+                "A=%f B=%f C=%f\n",
+                blockIdx.x,
+                threadIdx.x,
+                i,
+                A[i],
+                B[i],
+                C[i]
+            );
+        }
     }
 }
 
@@ -47,6 +60,7 @@ int main()
     const int   blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;
 
     vectorAdd<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N);
+    cudaDeviceSynchronize();
 
     cudaMemcpy(h_C, d_C, bytes, cudaMemcpyDeviceToHost);
 
